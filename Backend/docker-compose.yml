@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  my-node-app:
+    container_name: e-commmerce-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DB_URI=mongodb+srv://root:Password@mydatabase.bgb3ppk.mongodb.net/MyDatabase?retryWrites=true&w=majority&appName=MyDatabase
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  mongodb:
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: MyDatabase
+    ports:
+      - "27017:27017"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: root
+
+
+
+#version: '3'
+#services:
+#  my-node-app:
+#    image: my-node-app
+#    ports:
+#      - "8000:3000"
+#    environment:
+#      - NODE_ENV=production
